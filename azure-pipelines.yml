@@ -1,0 +1,74 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  staging_environment: 'staging'
+  production_environment: 'production'
+  docker_image_name: 'wagnersimonetto/monitoramento_ambiental_mgdb'  # Nome da sua imagem no Docker Hub
+  docker_image_tag: 'v1'  # Tag da imagem Docker
+  azure_web_app_name: 'monitoramentoambiental'  # Nome do seu Web App no Azure
+  docker_registry_service_connection: 'DockerHubConnection'  # Nome da conexão de serviço para Docker Hub
+
+steps:
+# Usar o SDK .NET para compilar o projeto
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.x'  # Versão do .NET SDK usada no projeto
+
+# Construir a imagem Docker
+- task: Docker@2
+  inputs:
+    command: 'build'
+    repository: $(docker_image_name)  # Nome da imagem sendo construída
+    dockerfile: '**/Dockerfile'
+    tags: $(docker_image_tag)  # Tag da imagem Docker
+    containerRegistry: $(docker_registry_service_connection)
+
+# Enviar a imagem para o Docker Hub
+- task: Docker@2
+  inputs:
+    command: 'push'
+    repository: $(docker_image_name)  # Nome da imagem a ser enviada
+    tags: $(docker_image_tag)  # Tag da imagem Docker
+    containerRegistry: $(docker_registry_service_connection)
+
+# Implantar no Web App do Azure
+- task: AzureWebAppContainer@1
+  inputs:
+    azureSubscription: 'MyAzureDevOpsConnection'  # Nome da conexão de serviço do Azure
+    appName: $(azure_web_app_name)  # Nome do Web App no Azure
+    imageName: $(docker_image_name):$(docker_image_tag)  # Nome e tag da imagem Docker
+
+# Opcional: Testar a implantação no ambiente de Staging
+- stage: DeployStaging
+  jobs:
+  - deployment: DeployStaging
+    environment: $(staging_environment)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebAppContainer@1
+            inputs:
+              azureSubscription: 'MyAzureDevOpsConnection'
+              appName: $(azure_web_app_name)
+              imageName: $(docker_image_name):$(docker_image_tag)
+
+# Deploy para produção
+- stage: DeployProduction
+  jobs:
+  - deployment: DeployProduction
+    environment: $(production_environment)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebAppContainer@1
+            inputs:
+              azureSubscription: 'MyAzureDevOpsConnection'
+              appName: $(azure_web_app_name)
+              imageName: $(docker_image_name):$(docker_image_tag)

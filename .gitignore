@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignorar arquivos de configuração sensíveis
+.env
+.env.local
+.env.*.local

@@ -1,12 +1,23 @@
+using DotNetEnv;
 using monitoramento_ambiental_mongodb.Data;
 using monitoramento_ambiental_mongodb.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurações do MongoDB
-builder.Services.Configure<DataBaseSettings>(
-    builder.Configuration.GetSection("Database"));
+// Carregar variáveis de ambiente
+Env.Load();
 
+// Configurações do MongoDB usando variáveis de ambiente
+builder.Services.Configure<DataBaseSettings>(options =>
+{
+    options.ConnectionURI = Environment.GetEnvironmentVariable("MONGODB_URI")!;
+    options.DatabaseName = Environment.GetEnvironmentVariable("DATABASE_NAME")!;
+    options.SensorCollectionName = Environment.GetEnvironmentVariable("SENSOR_COLLECTION_NAME")!;
+    options.LeituraCollectionName = Environment.GetEnvironmentVariable("LEITURA_COLLECTION_NAME")!;
+    options.ControleIrrigacaoCollectionName = Environment.GetEnvironmentVariable("CONTROLE_IRRIGACAO_COLLECTION_NAME")!;
+    options.AlertaCollectionName = Environment.GetEnvironmentVariable("ALERTA_COLLECTION_NAME")!;
+    options.PrevisaoChuvaCollectionName = Environment.GetEnvironmentVariable("PREVISAO_CHUVA_COLLECTION_NAME")!;
+});
 // Adiciona o contexto do MongoDB
 builder.Services.AddScoped<MongoDBContext>();
 
