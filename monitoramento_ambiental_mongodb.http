@@ -1,0 +1,6 @@
+@monitoramento_ambiental_mongodb_HostAddress = http://localhost:5072
+
+GET {{monitoramento_ambiental_mongodb_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
