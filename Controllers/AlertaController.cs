@@ -62,7 +62,7 @@ namespace monitoramento_ambiental_mongodb.Controllers
             {
                 return NotFound();
             }
-            await _alertaService.UpdateAsync(id, alertaModel);
+            await _alertaService.UpdateAsync(id, alertaModel);//
             return NoContent();
         }
 
