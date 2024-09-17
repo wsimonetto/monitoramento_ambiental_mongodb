@@ -48,8 +48,8 @@ jobs:
       - name: Deploy via FTP
         uses: samuelmeuli/action-ftp@v1
         with:
-          server: 'ftps://waws-prod-blu-323.ftp.azurewebsites.windows.net/site/wwwroot'
+          server: 'ftps://waws-prod-blu-323.ftp.azurewebsites.windows.net'
           username: ${{ secrets.AZURE_FTP_USERNAME }}
           password: ${{ secrets.AZURE_FTP_PASSWORD }}
-          local-dir: './build'
+          local-dir: './path-to-your-artifacts'  # Ajuste este diretório se necessário
           remote-dir: '/'
