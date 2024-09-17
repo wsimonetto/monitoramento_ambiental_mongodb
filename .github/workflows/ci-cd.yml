@@ -51,5 +51,5 @@ jobs:
           server: 'ftps://waws-prod-blu-323.ftp.azurewebsites.windows.net'
           username: ${{ secrets.AZURE_FTP_USERNAME }}
           password: ${{ secrets.AZURE_FTP_PASSWORD }}
-          local-dir: './path-to-your-artifacts'  # Ajuste este diretório se necessário
+          local-dir: './publish'
           remote-dir: '/'
