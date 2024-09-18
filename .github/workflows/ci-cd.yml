@@ -1,4 +1,5 @@
 name: CI/CD Pipeline
+
 on:
   push:
     branches:
@@ -6,38 +7,51 @@ on:
   pull_request:
     branches:
       - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
+
       - name: Restore dependencies
         run: dotnet restore
+
       - name: Build
         run: dotnet build --configuration Debug
+
       - name: List directory contents
-        run: ls -R ./bin/Debug/net8.0
+        run: ls -R ./bin/Debug/net8.0  # Verifique o conteúdo do diretório
+
       - name: Build Docker image
         run: |
           docker build -t wagnersimonetto/monitoramento_ambiental_mgdb:v1 .
+
       - name: Push Docker image
         run: |
           echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
           docker push wagnersimonetto/monitoramento_ambiental_mgdb:v1
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Restart Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ secrets.AZURE_APP_NAME }}
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
 
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Restart Azure Web App
+        uses: azure/webapps-deploy@v1
+        with:
+          app-name: 'your-web-app-name'  # Substitua pelo nome do seu Web App
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
