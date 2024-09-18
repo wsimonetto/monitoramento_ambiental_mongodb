@@ -36,7 +36,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Deploy via FTP
-        uses: peaceiris/actions-ftp-deploy@v1
+        uses: ftp-deploy/ftp-deploy-action@v1
         with:
           host: ${{ secrets.AZURE_FTP_HOST }}
           username: ${{ secrets.AZURE_FTP_USERNAME }}
