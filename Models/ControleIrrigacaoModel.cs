@@ -20,7 +20,7 @@ namespace monitoramento_ambiental_mongodb.Models
         public DateTime DataHora { get; set; }
 
         [BsonElement("previsao_chuva_id")]
-        public string PrevisaoChuvaId { get; set; }
+        public string? PrevisaoChuvaId { get; set; }
 
         public PrevisaoChuvaModel? PrevisaoChuva { get; set; }
     }

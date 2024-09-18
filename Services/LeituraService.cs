@@ -205,7 +205,7 @@ namespace monitoramento_ambiental_mongodb.Services
         public class Response
         {
             public bool Success { get; set; }
-            public string Message { get; set; }
+            public string? Message { get; set; }
             public LeituraModel? CreatedItem { get; set; }
         }
     }
