@@ -42,7 +42,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Deploy to Staging
         run: |
-          az webapp config container set --name my-staging-app --resource-group FIAP --docker-custom-image-name wagnersimonetto/monitoramento_ambiental_mgdb:v1
+          az webapp config container set --name my-staging-app --resource-group FIAP --container-image-name wagnersimonetto/monitoramento_ambiental_mgdb:v1
 
   deploy-production:
     runs-on: ubuntu-latest
@@ -54,4 +54,4 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Deploy to Production
         run: |
-          az webapp config container set --name my-production-app --resource-group FIAP --docker-custom-image-name wagnersimonetto/monitoramento_ambiental_mgdb:v1
+          az webapp config container set --name my-production-app --resource-group FIAP --container-image-name wagnersimonetto/monitoramento_ambiental_mgdb:v1
