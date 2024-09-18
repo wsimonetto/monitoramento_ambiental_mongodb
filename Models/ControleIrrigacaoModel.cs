@@ -24,5 +24,5 @@ namespace monitoramento_ambiental_mongodb.Models
 
         public PrevisaoChuvaModel? PrevisaoChuva { get; set; }
     }
-    //
+    
 }
