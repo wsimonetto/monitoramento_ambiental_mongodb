@@ -40,4 +40,4 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Restart Azure Web App
-        run: az webapp restart --name monitoramentoambiental --resource-group FIAP
+        run: az webapp restart --name monitoramentoambiental --resource-group FIAP #
