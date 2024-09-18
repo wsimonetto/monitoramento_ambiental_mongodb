@@ -36,7 +36,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Deploy via FTP
-        uses: ftp-deploy/ftp-deploy-action@v1
+        uses: SamKirkland/ftp-deploy-action@v4.3.5
         with:
           host: ${{ secrets.AZURE_FTP_HOST }}
           username: ${{ secrets.AZURE_FTP_USERNAME }}
