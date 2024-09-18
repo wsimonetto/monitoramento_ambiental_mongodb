@@ -19,11 +19,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --configuration Release
-      - name: Publish
-        run: dotnet publish --configuration Release --output ./build
+        run: dotnet build --configuration Debug
       - name: List directory contents
-        run: ls -R ./build  # Confirma que o diretório build foi criado e contém arquivos
+        run: ls -R ./bin/Debug/net8.0  # Verifique o conteúdo do diretório
       - name: Build Docker image
         run: |
           docker build -t wagnersimonetto/monitoramento_ambiental_mgdb:v1 .
@@ -43,7 +41,6 @@ jobs:
           server: ${{ secrets.AZURE_FTP_HOST }}
           username: ${{ secrets.AZURE_FTP_USERNAME }}
           password: ${{ secrets.AZURE_FTP_PASSWORD }}
-          local-dir: './build/'  # Deve corresponder ao diretório gerado na etapa de build
+          local-dir: './bin/Debug/net8.0/'  # Atualizado para corresponder ao diretório de saída
           server-dir: '/'
 
-          
