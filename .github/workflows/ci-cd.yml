@@ -41,6 +41,6 @@ jobs:
           server: ${{ secrets.AZURE_FTP_HOST }}
           username: ${{ secrets.AZURE_FTP_USERNAME }}
           password: ${{ secrets.AZURE_FTP_PASSWORD }}
-          local-dir: './build'
+          local-dir: './build/'
           server-dir: '/'
           
