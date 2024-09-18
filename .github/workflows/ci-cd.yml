@@ -40,5 +40,10 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Print Azure CLI version
+        run: az --version
+      - name: List Azure Web Apps
+        run: az webapp list --query "[].{name:name, resourceGroup:resourceGroup}" --output table
       - name: Restart Azure Web App
         run: az webapp restart --name monitoramentoambiental --resource-group FIAP
+
