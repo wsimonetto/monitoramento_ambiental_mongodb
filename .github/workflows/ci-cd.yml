@@ -21,7 +21,7 @@ jobs:
       - name: Build
         run: dotnet build --configuration Debug
       - name: List directory contents
-        run: ls -R ./bin/Debug/net8.0  # Verifique o conteúdo do diretório
+        run: ls -R ./bin/Debug/net8.0
       - name: Build Docker image
         run: |
           docker build -t wagnersimonetto/monitoramento_ambiental_mgdb:v1 .
@@ -30,17 +30,15 @@ jobs:
           echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
           docker push wagnersimonetto/monitoramento_ambiental_mgdb:v1
   deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Deploy via FTP
-        uses: SamKirkland/ftp-deploy-action@v4.3.5
-        with:
-          server: ${{ secrets.AZURE_FTP_HOST }}
-          username: ${{ secrets.AZURE_FTP_USERNAME }}
-          password: ${{ secrets.AZURE_FTP_PASSWORD }}
-          local-dir: './bin/Debug/net8.0/'  # Atualizado para corresponder ao diretório de saída
-          server-dir: '/'
-
+  runs-on: ubuntu-latest
+  needs: build
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Restart Azure Web App
+      run: |
+        az webapp restart --name <NOME_DO_WEBAPP> --resource-group FIAP
