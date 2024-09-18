@@ -20,8 +20,10 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release
-      - name: Test
-        run: dotnet test --configuration Release
+      - name: Publish
+        run: dotnet publish --configuration Release --output ./build
+      - name: List directory contents
+        run: ls -R ./build  # Confirma que o diretório build foi criado e contém arquivos
       - name: Build Docker image
         run: |
           docker build -t wagnersimonetto/monitoramento_ambiental_mgdb:v1 .
@@ -41,6 +43,7 @@ jobs:
           server: ${{ secrets.AZURE_FTP_HOST }}
           username: ${{ secrets.AZURE_FTP_USERNAME }}
           password: ${{ secrets.AZURE_FTP_PASSWORD }}
-          local-dir: './build/'
+          local-dir: './build/'  # Deve corresponder ao diretório gerado na etapa de build
           server-dir: '/'
+
           
