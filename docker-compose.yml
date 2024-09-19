@@ -10,4 +10,5 @@ services:
       - "8081:8081"
     env_file:
       - .env
+    command: ["dotnet", "monitoramento_ambiental_mongodb.dll"]
     restart: always
